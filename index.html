@@ -1,3 +1,4 @@
+Now be replying saved
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -488,7 +489,7 @@ button,input,select,textarea { font-family:var(--ff-b); }
             <div class="form-group">
               <label class="form-label">Category *</label>
               <select class="form-select form-input" id="F_CAT">
-                <option value="">Select category</option>
+                <option value="" disabled selected>Select category</option>
                 <option value="women">Women</option>
                 <option value="men">Men</option>
                 <option value="children">Children</option>
@@ -978,7 +979,7 @@ async function uploadEditImages(){
 async function saveProduct(){
   const name     = document.getElementById('F_NAME').value.trim();
   const cat      = document.getElementById('F_CAT').value;
-  const price    = Number(document.getElementById('F_PRICE').value);
+  const price    = parseFloat(document.getElementById('F_PRICE').value.toString().trim());
   const saleP    = Number(document.getElementById('F_SALEPRICE').value)||null;
   const desc     = document.getElementById('F_DESC').value.trim();
   const mat      = document.getElementById('F_MAT').value.trim();
@@ -987,7 +988,9 @@ async function saveProduct(){
   const oos      = getCheckedSizes('OOS_GRID');
 
   const stock    = getStockValues('STOCK_GRID', sizes);
-  if(!name||!cat||!price){ toast('Name, category and price are required'); return; }
+  if(!name)  { toast('Product name is required'); return; }
+  if(!cat)   { toast('Please select a category'); return; }
+  if(!price || isNaN(price) || price <= 0){ toast('Please enter a valid price'); return; }
   if(pendingFiles.filter(Boolean).length===0){ toast('Please add at least one image'); return; }
 
   const btn = document.getElementById('SAVE_BTN');
